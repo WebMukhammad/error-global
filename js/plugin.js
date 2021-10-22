@@ -37,6 +37,7 @@ export default function ({ error }, inject) {
       logBaseError(arg)
       
       console.log(JSON.stringify('<%= options %>'))
+      console.log(JSON.parse('<%= options %>'))
       console.dir(JSON.stringify('<%= options %>'))
       console.dir('<%= options %>')
     }
