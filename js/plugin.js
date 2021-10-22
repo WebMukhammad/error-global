@@ -1,13 +1,6 @@
 import Vue from 'vue'
 import Tooltip from '05-ui-kit/lib/Tooltip'
 
-import nasa from '<%= options %>'
-
-const { onError, logBaseError } = {
-  onError: () => {},
-  logBaseError: true
-}
-
 export default function ({ error }, inject) {
   Vue.config.errorHandler = (e) => {
     new BaseError({ ...ErrorSeriazlier(e), loggerTitle: 'Ошибка в глобальном обработчике вью' })
@@ -28,8 +21,7 @@ export default function ({ error }, inject) {
 
       this.name = 'BaseError'
       onError(arg)
-      logBaseError && this.log(arg)
-      console.log(nasa)
+      this.log(arg)
     }
 
     log(e) {
