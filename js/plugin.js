@@ -2,7 +2,8 @@ import Vue from 'vue'
 import Tooltip from '05-ui-kit/lib/Tooltip'
 
 const options = '<%= options %>' || {}
-
+console.log(11)
+console.log('<%= options %>')
 const { onError, logBaseError } = {
   onError: () => {},
   logBaseError: (e) => {
@@ -14,6 +15,10 @@ const { onError, logBaseError } = {
 }
 
 export default function ({ error }, inject) {
+
+console.log(22)
+console.log('<%= options %>')
+
   Vue.config.errorHandler = (e) => {
     new BaseError({ ...ErrorSeriazlier(e), loggerTitle: 'Ошибка в глобальном обработчике вью' })
   }
