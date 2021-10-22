@@ -36,9 +36,9 @@ export default function ({ error }, inject) {
       onError(arg)
       logBaseError(arg)
 
-      let sas = '<%= options %>'
+      let sas = '<%= options.token %>'
 
-      console.log(sas.token)
+      console.log(sas)
     }
   }
 
