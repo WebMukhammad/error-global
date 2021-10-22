@@ -35,8 +35,10 @@ export default function ({ error }, inject) {
       this.name = 'BaseError'
       onError(arg)
       logBaseError(arg)
-      
-      console.log('<%= options %>')
+
+      let sas = '<%= options %>'
+
+      console.log(sas.token)
     }
   }
 
