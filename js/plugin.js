@@ -1,16 +1,12 @@
 import Vue from 'vue'
 import Tooltip from '05-ui-kit/lib/Tooltip'
 
-const params = {
+import nasa from '<%= options %>'
+
+const { onError, logBaseError } = {
   onError: () => {},
   logBaseError: true
 }
-
-const { onError, logBaseError } = params
-
-Object.keys(params).forEach((el) => {
-  params.el = `<%= options.${el} %>` || params.el
-})
 
 export default function ({ error }, inject) {
   Vue.config.errorHandler = (e) => {
@@ -33,7 +29,7 @@ export default function ({ error }, inject) {
       this.name = 'BaseError'
       onError(arg)
       logBaseError && this.log(arg)
-      console.log(logBaseError)
+      console.log(nasa)
     }
 
     log(e) {
