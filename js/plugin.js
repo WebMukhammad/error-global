@@ -5,10 +5,15 @@ const options = '<%= options %>' || {}
 
 const { onError } = {
   onError: () => {},
+  logBaseError: (e) => {
+    console.log('%c' + (e?.loggerTitle || 'Произошла ошибка'), 'font-size:17px;color:red')
+    console.log(e)
+    if (e?.native) console.log(e.native)
+  },
   ...options
 }
 
-export default function ({ $sentry, store, error }, inject) {
+export default function ({ error }, inject) {
   Vue.config.errorHandler = (e) => {
     new BaseError({ ...ErrorSeriazlier(e), loggerTitle: 'Ошибка в глобальном обработчике вью' })
   }
@@ -27,42 +32,8 @@ export default function ({ $sentry, store, error }, inject) {
       }
 
       this.name = 'BaseError'
-      this.sendErrorToSentry(arg)
-      this.log(arg)
-    }
-
-    sendErrorToSentry(e) {
-      onError()
-      if (process.env.NODE_ENV === 'production') {
-        if (store.state.user?.data) {
-          const { name, login, email, id } = store.state.user?.data
-          $sentry.setContext('User data', {
-            name,
-            login,
-            email,
-            id
-          })
-        }
-
-        if (store.state.location?.currentCity) {
-          const { name: currentCityName, id: currentCityId, region } = store.state.location?.currentCity
-          $sentry.setContext('User Location', {
-            currentRegionName: region.name,
-            currentRegionId: region.id,
-            currentCityName,
-            currentCityId
-          })
-        }
-
-        $sentry.setContext('Error description', e)
-        $sentry.captureException(e?.message || 'произошла ошибка')
-      }
-    }
-
-    log(e) {
-      console.log('%c' + (e?.loggerTitle || 'Произошла ошибка'), 'font-size:17px;color:red')
-      console.log(e)
-      if (e?.native) console.log(e.native)
+      onError(arg)
+      logBaseError(arg)
     }
   }
 
