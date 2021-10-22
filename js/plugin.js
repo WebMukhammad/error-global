@@ -1,20 +1,18 @@
 import Vue from 'vue'
 import Tooltip from '05-ui-kit/lib/Tooltip'
 
-const options = '<%= options %>'
-
-const { onError, logBaseError } = {
+const params = {
   onError: () => {},
-  logBaseError: (e) => {
-    console.log('%c' + (e?.loggerTitle || 'Произошла ошибка'), 'font-size:17px;color:red')
-    console.log(e)
-    if (e?.native) console.log(e.native)
-  },
-  ...options
+  logBaseError: true
 }
 
-export default function ({ error }, inject) {
+const { onError, logBaseError } = params
 
+Object.keys(params).forEach((el) => {
+  params.el = `<%= options.${el} %>` || params.el
+})
+
+export default function ({ error }, inject) {
   Vue.config.errorHandler = (e) => {
     new BaseError({ ...ErrorSeriazlier(e), loggerTitle: 'Ошибка в глобальном обработчике вью' })
   }
@@ -34,9 +32,14 @@ export default function ({ error }, inject) {
 
       this.name = 'BaseError'
       onError(arg)
-      logBaseError(arg)
-      
-     console.log(this.options)
+      logBaseError && this.log(arg)
+      console.log(logBaseError)
+    }
+
+    log(e) {
+      console.log('%c' + (e?.loggerTitle || 'Произошла ошибка'), 'font-size:17px;color:red')
+      console.log(e)
+      if (e?.native) console.log(e.native)
     }
   }
 
@@ -71,7 +74,7 @@ export default function ({ error }, inject) {
   inject('simpleError', SimpleError)
 }
 
-function ErrorSeriazlier (event) {
+function ErrorSeriazlier(event) {
   const api = !!event?.request
   const model = !!event?.isModelError
   const syntax = !model && ['TypeError', 'SyntaxError', 'RangeError', 'InternalError', 'ReferenceError'].some((v) => v === event?.name)
