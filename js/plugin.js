@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Tooltip from '05-ui-kit/lib/Tooltip'
 
-const options = '<%= options %>' || {}
+const options = '<%= options %>'
 
 const { onError, logBaseError } = {
   onError: () => {},
@@ -35,10 +35,8 @@ export default function ({ error }, inject) {
       this.name = 'BaseError'
       onError(arg)
       logBaseError(arg)
-
-      let sas = '<%= options.token %>'
-
-      console.log(sas)
+      
+      console.dir('<%= options%>')
     }
   }
 
