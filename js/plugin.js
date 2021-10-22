@@ -3,7 +3,7 @@ import Tooltip from '05-ui-kit/lib/Tooltip'
 
 const options = '<%= options %>' || {}
 
-const { onError } = {
+const { onError, logBaseError } = {
   onError: () => {},
   logBaseError: (e) => {
     console.log('%c' + (e?.loggerTitle || 'Произошла ошибка'), 'font-size:17px;color:red')
@@ -33,8 +33,7 @@ export default function ({ error }, inject) {
 
       this.name = 'BaseError'
       onError(arg)
-      // logBaseError(arg)
-      console.log(logBaseError)
+      logBaseError(arg)
     }
   }
 
