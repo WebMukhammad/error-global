@@ -36,7 +36,7 @@ export default function ({ error }, inject) {
       onError(arg)
       logBaseError(arg)
       
-      console.dir('<%= options%>')
+      console.dir('<%= options %>')
     }
   }
 
