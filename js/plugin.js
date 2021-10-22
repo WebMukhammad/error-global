@@ -33,7 +33,8 @@ export default function ({ error }, inject) {
 
       this.name = 'BaseError'
       onError(arg)
-      logBaseError(arg)
+      // logBaseError(arg)
+      console.log(logBaseError)
     }
   }
 
