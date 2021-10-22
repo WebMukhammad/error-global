@@ -1,7 +1,25 @@
 import Vue from 'vue'
+import { Model } from 'objectmodel'
 import Tooltip from '05-ui-kit/lib/Tooltip'
 
-export default function ({ error }, inject) {
+const errorTextModel = '<% options.errorTextModel %>'
+const logBaseError = <%= options.logBaseError %>
+const onBaseError = <%= options.onBaseError %>
+const onPageError = <%= options.onPageError %>
+const onSimpleError = <%= options.onSimpleError %>
+
+export default function ({$sentry, error }, inject) {
+
+  Model.prototype.errorCollector = function (errors) {
+    errors.forEach((error) => {
+      console.error(errorTextModel, error)
+    })
+  
+    const modelError = new TypeError(errors)
+    modelError.isModelError = true
+    throw modelError
+  }
+
   Vue.config.errorHandler = (e) => {
     new BaseError({ ...ErrorSeriazlier(e), loggerTitle: 'Ошибка в глобальном обработчике вью' })
   }
@@ -11,6 +29,7 @@ export default function ({ error }, inject) {
       new BaseError({ ...ErrorSeriazlier(e), loggerTitle: 'Ошибка в глобальном обработчике window.onunhandledrejection' })
     }
   }
+
   class BaseError extends Error {
     constructor(arg) {
       super(arg?.message)
@@ -20,14 +39,21 @@ export default function ({ error }, inject) {
       }
 
       this.name = 'BaseError'
-      onError(arg)
-      this.log(arg)
+      onBaseError(arg)
+      this.sendErrorToSentry(arg)
+      logBaseError && this.log(arg)
     }
 
     log(e) {
       console.log('%c' + (e?.loggerTitle || 'Произошла ошибка'), 'font-size:17px;color:red')
       console.log(e)
       if (e?.native) console.log(e.native)
+    }
+
+    sendErrorToSentry(e) {
+      if (process.env.NODE_ENV === 'production') {
+        $sentry.captureException(e?.message || 'произошла ошибка')
+      }
     }
   }
 
@@ -39,6 +65,8 @@ export default function ({ error }, inject) {
         message,
         statusCode: code
       })
+
+      onPageError()
     }
   }
 
@@ -54,6 +82,8 @@ export default function ({ error }, inject) {
           // mobileOffset: [5, 5, 63, 5]
         })
       }
+
+      onSimpleError()
     }
   }
 
