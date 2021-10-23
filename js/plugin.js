@@ -32,7 +32,7 @@ export default function (context, inject) {
 
       this.name = 'BaseError'
 
-      onBaseError(arg)
+      onBaseError(context)
       errorToSentry && this.sendErrorToSentry(arg)
       logBaseError && this.log(arg)
     }
@@ -45,7 +45,8 @@ export default function (context, inject) {
 
     sendErrorToSentry(e) {
       if (process.env.NODE_ENV === 'production') {
-        context.$sentry.captureException(e?.message || 'произошла ошибка')
+        $sentry.setContext('Error description', e)
+        $sentry.captureException(e?.message || 'произошла ошибка')
       }
     }
   }
@@ -59,7 +60,7 @@ export default function (context, inject) {
         statusCode: code
       })
 
-      onPageError()
+      onPageError(context)
     }
   }
 
@@ -76,7 +77,7 @@ export default function (context, inject) {
         })
       }
 
-      onSimpleError()
+      onSimpleError(context)
     }
   }
 

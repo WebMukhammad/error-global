@@ -6,10 +6,10 @@ export default function errorGlobal(options) {
     options: {
       logBaseError: true,
       errorToSentry: true,
-      onInit: (data) => {},
-      onBaseError: (data) => {},
-      onPageError: (data) => {},
-      onSimpleError: (data) => {},
+      onInit: (context) => {},
+      onBaseError: (context) => {},
+      onPageError: (context) => {},
+      onSimpleError: (context) => {},
       ...options
     }
   })
