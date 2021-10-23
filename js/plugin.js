@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import { Model } from 'objectmodel'
 import Tooltip from '05-ui-kit/lib/Tooltip'
 
 const logBaseError = <%= options.logBaseError %>
