@@ -2,23 +2,16 @@ import Vue from 'vue'
 import { Model } from 'objectmodel'
 import Tooltip from '05-ui-kit/lib/Tooltip'
 
-const errorTextModel = '<% options.errorTextModel %>'
 const logBaseError = <%= options.logBaseError %>
+const errorToSentry = <%= options.errorToSentry %>
+const onInit = <%= options.onInit %>
 const onBaseError = <%= options.onBaseError %>
 const onPageError = <%= options.onPageError %>
 const onSimpleError = <%= options.onSimpleError %>
 
-export default function ({$sentry, error }, inject) {
-
-  Model.prototype.errorCollector = function (errors) {
-    errors.forEach((error) => {
-      console.error(errorTextModel, error)
-    })
+export default function (context, inject) {
   
-    const modelError = new TypeError(errors)
-    modelError.isModelError = true
-    throw modelError
-  }
+  onInit(context)
 
   Vue.config.errorHandler = (e) => {
     new BaseError({ ...ErrorSeriazlier(e), loggerTitle: 'Ошибка в глобальном обработчике вью' })
@@ -29,7 +22,6 @@ export default function ({$sentry, error }, inject) {
       new BaseError({ ...ErrorSeriazlier(e), loggerTitle: 'Ошибка в глобальном обработчике window.onunhandledrejection' })
     }
   }
-
   class BaseError extends Error {
     constructor(arg) {
       super(arg?.message)
@@ -39,8 +31,9 @@ export default function ({$sentry, error }, inject) {
       }
 
       this.name = 'BaseError'
+
       onBaseError(arg)
-      this.sendErrorToSentry(arg)
+      errorToSentry && this.sendErrorToSentry(arg)
       logBaseError && this.log(arg)
     }
 
@@ -52,7 +45,7 @@ export default function ({$sentry, error }, inject) {
 
     sendErrorToSentry(e) {
       if (process.env.NODE_ENV === 'production') {
-        $sentry.captureException(e?.message || 'произошла ошибка')
+        context.$sentry.captureException(e?.message || 'произошла ошибка')
       }
     }
   }
@@ -61,7 +54,7 @@ export default function ({$sentry, error }, inject) {
     constructor({ type, name, message, code = 500, native } = {}) {
       super({ type, name, message, code, native, loggerTitle: 'Ошибка на странице' })
       this.name = 'PageError'
-      error({
+      context.error({
         message,
         statusCode: code
       })
