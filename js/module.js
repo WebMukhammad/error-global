@@ -6,12 +6,12 @@ export default function errorGlobal(options) {
     options: {
       logBaseError: true,
       errorToSentry: true,
-      mobileOffsetTooltip: [],
       onInit: (context) => {},
       onBaseError: (context) => {},
       onPageError: (context) => {},
       onSimpleError: (context) => {},
-      ...options
+      ...options,
+      mobileOffsetTooltip: JSON.stringify(options.mobileOffsetTooltip || [])
     }
   })
 }
