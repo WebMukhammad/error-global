@@ -3,13 +3,14 @@ import Tooltip from '05-ui-kit/lib/Tooltip'
 
 const logBaseError = <%= options.logBaseError %>
 const errorToSentry = <%= options.errorToSentry %>
+const mobileOffsetTooltip = <%= options.mobileOffsetTooltip %>
 const onInit = <%= options.onInit %>
 const onBaseError = <%= options.onBaseError %>
 const onPageError = <%= options.onPageError %>
 const onSimpleError = <%= options.onSimpleError %>
 
 export default function (context, inject) {
-  
+
   onInit(context)
 
   Vue.config.errorHandler = (e) => {
@@ -71,8 +72,8 @@ export default function (context, inject) {
         Tooltip({
           type: 'error',
           title: name,
-          description: message
-          // mobileOffset: [5, 5, 63, 5]
+          description: message,
+          mobileOffset: mobileOffsetTooltip
         })
       }
 

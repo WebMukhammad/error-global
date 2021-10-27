@@ -1,14 +1,14 @@
 {
-  "name": "error-global",
+  "name": "nuxt-error-module",
   "version": "1.0.0",
   "description": "Модуль для базовых ошибок",
   "author": "Alexander Saburov <mochej2@gmail.com>",
   "main": "js/module.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/artmizu/05.git"
+    "url": "https://gitlab.05.ru/master-group/package/nuxt-error-module"
   },
   "dependencies": {
-    "05-ui-kit": "^1.7.13"
+    "05-ui-kit": "^1.7.15"
   }
 }

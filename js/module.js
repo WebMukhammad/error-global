@@ -6,6 +6,7 @@ export default function errorGlobal(options) {
     options: {
       logBaseError: true,
       errorToSentry: true,
+      mobileOffsetTooltip: [],
       onInit: (context) => {},
       onBaseError: (context) => {},
       onPageError: (context) => {},
